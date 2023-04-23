@@ -4,29 +4,28 @@ import quiz from "../data/quiz";
 
 function App() {
   const [questions, setQuestions] = useState(quiz);
-  const [currentQuestionId, setCurrentQuestion] = useState(1);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
-  const currentQuestion = questions.find((q) => q.id === currentQuestionId);
 
-  function handleQuestionAnswered(correct) {
-    if (currentQuestionId < questions.length) {
-      setCurrentQuestion((currentQuestionId) => currentQuestionId + 1);
+  function handleQuestionAnswered(isCorrect) {
+    if (currentQuestionIndex < questions.length - 1) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
-      setCurrentQuestion(null);
+      setCurrentQuestionIndex(null);
     }
-    if (correct) {
-      setScore((score) => score + 1);
+
+    if (isCorrect) {
+      setScore(score + 1);
     }
   }
+
+  const currentQuestion = currentQuestionIndex !== null ? questions[currentQuestionIndex] : null;
 
   return (
     <main>
       <section>
         {currentQuestion ? (
-          <Question
-            question={currentQuestion}
-            onAnswered={handleQuestionAnswered}
-          />
+          <Question question={currentQuestion} onAnswered={handleQuestionAnswered} />
         ) : (
           <>
             <h1>Game Over</h1>
